@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +25,16 @@ public class Role {
   @ManyToMany(mappedBy = "roles")
   @EqualsAndHashCode.Exclude
   private Set<User> users = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+          name = "role_permission",
+          joinColumns = @JoinColumn(name = "role_id"),
+          inverseJoinColumns = @JoinColumn(name = "permission_id")
+  )
+  @EqualsAndHashCode.Exclude
+  private Set<Permission> permissions = new HashSet<>();
+
 
   public Role(final String name) {
     this.name = name;

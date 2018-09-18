@@ -3,6 +3,8 @@ package me.dlevin.securitydemo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -45,12 +50,34 @@ public class UserService implements UserDetailsService {
             .withUsername(user.getUsername())
             .password(user.getPassword())
             .passwordEncoder(this.passwordEncoder::encode)
-            .roles(user.getRoles()
-                    .stream()
-                    .map(Role::getName)
-                    .toArray(String[]::new)
-            )
+            .authorities(this.getGrantedAuthorities(user.getRoles()))
             .build();
+  }
+
+  private Set<GrantedAuthority> getGrantedAuthorities(final Set<Role> roles) {
+    final Set<String> roleNames = roles.stream()
+            .map(Role::getName)
+            .map(roleName -> "ROLE_" + roleName)
+            .collect(Collectors.toSet());
+
+    final Set<String> permissionNames = this.getPermissions(roles).stream()
+            .map(Permission::getName)
+            .collect(Collectors.toSet());
+
+    final Set<String> rolesAndPermissionNames = new HashSet<>();
+    rolesAndPermissionNames.addAll(roleNames);
+    rolesAndPermissionNames.addAll(permissionNames);
+
+    return rolesAndPermissionNames.stream()
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toSet());
+  }
+
+  private Set<Permission> getPermissions(final Set<Role> roles) {
+    return roles.stream()
+            .map(Role::getPermissions)
+            .flatMap(Set::stream)
+            .collect(Collectors.toSet());
   }
 
 }
