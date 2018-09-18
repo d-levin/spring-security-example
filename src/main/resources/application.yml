@@ -1,0 +1,10 @@
+server:
+  port: 9000
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+logging:
+  level:
+    me.dlevin: debug
+    org.springframework: error
