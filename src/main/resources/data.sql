@@ -1,25 +1,25 @@
-insert into `user` (id, username, `password`)
-values (1, 'admin', 'password'),
+INSERT INTO `user` (id, username, `password`)
+VALUES (1, 'admin', 'password'),
        (2, 'user', 'password');
 
-insert into `role` (id, `name`)
-values (1, 'ADMIN'),
+INSERT INTO `role` (id, `name`)
+VALUES (1, 'ADMIN'),
        (2, 'USER');
 
-insert into `user_role` (user_id, role_id)
-values (1, 1),
+INSERT INTO `user_role` (user_id, role_id)
+VALUES (1, 1),
        (1, 2),
        (2, 2);
 
-insert into `permission` (id, `name`)
-values (1, 'item_create'),
-       (2, 'item_delete'),
-       (3, 'item_update'),
-       (4, 'item_view');
+INSERT INTO `permission` (id, `name`)
+VALUES (1, 'ITEM_CREATE'),
+       (2, 'ITEM_READ'),
+       (3, 'ITEM_UPDATE'),
+       (4, 'ITEM_DELETE');
 
-insert into `role_permission` (role_id, permission_id)
-values (1, 1),
+INSERT INTO `role_permission` (role_id, permission_id)
+VALUES (1, 1),
        (1, 2),
        (1, 3),
        (1, 4),
-       (2, 4);
+       (2, 2);
