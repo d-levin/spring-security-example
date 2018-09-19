@@ -19,3 +19,14 @@ http://localhost:9000/h2-console
 __JDBC URL:__   `jdbc:h2:mem:testdb`\
 __User Name:__  `sa`\
 __Password:__   `<blank>`
+
+
+## Endpoints
+| Method | Resource | Required Role | Required Permission |
+| ------ | --- | ------------- | ------------------- |
+| `GET` | `/admin` | ADMIN |
+| `GET` | `/user` | USER |
+| `GET` | `/items` | | ITEM_READ |
+| `POST` | `/items` | | ITEM_CREATE |
+| `PUT` | `/items` | | ITEM_UPDATE |
+| `DELETE` | `/items` | | ITEM_DELETE |
