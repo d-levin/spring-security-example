@@ -7,4 +7,4 @@ spring:
 logging:
   level:
     me.dlevin: debug
-    org.springframework: error
+    org.springframework: info
