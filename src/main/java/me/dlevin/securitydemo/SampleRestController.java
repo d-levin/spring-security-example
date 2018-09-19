@@ -6,7 +6,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -35,9 +38,12 @@ public class SampleRestController {
 
   @PostMapping("/items")
   @PreAuthorize("hasAuthority(T(me.dlevin.securitydemo.Permission).ITEM_CREATE)")
-  public String requiresItemCreatePermission() {
+  public String requiresItemCreatePermission(@RequestBody final Map<String, String> createRequest) {
     log.debug("Inside requiresItemCreatePermission");
-    return "ITEM_CREATE";
+
+    createRequest.keySet().forEach(key -> log.debug("{}: {}", key, createRequest.get(key)));
+
+    return "ITEM_CREATE\n\nRequest Body:\n" + createRequest;
   }
 
   @PutMapping("/items")
